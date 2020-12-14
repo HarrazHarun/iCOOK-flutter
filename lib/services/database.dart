@@ -8,9 +8,9 @@ class DatabaseService {
   final CollectionReference icookCollection =
       Firestore.instance.collection('Users');
 
-  Future updateUserData(String name) async {
+  Future updateUserData({String emailToDb}) async {
     return await icookCollection.document(uid).setData({
-      'name': name,
+      'email': emailToDb,
     });
   }
 }
