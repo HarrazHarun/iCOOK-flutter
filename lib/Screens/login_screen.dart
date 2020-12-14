@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iCOOK/Screens/Signup_screen.dart';
 
-import 'package:iCOOK/Screens/homepage.dart';
+import 'package:iCOOK/Screens/update_screen.dart';
 import 'package:iCOOK/components/already_have_an_account_acheck.dart';
 import 'package:iCOOK/components/rounded_button.dart';
 import 'package:iCOOK/components/rounded_input_field.dart';
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) {
-                                        return Home();
+                                        return UpdateScreen();
                                       },
                                     ),
                                   );

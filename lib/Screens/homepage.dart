@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iCOOK/Screens/Welcome_screen.dart';
 import 'package:iCOOK/services/auth.dart';
 
 class Home extends StatelessWidget {
@@ -17,6 +18,15 @@ class Home extends StatelessWidget {
             icon: Icon(Icons.person),
             label: Text('logout'),
             onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return WelcomeScreen();
+                  },
+                ),
+              );
+
               await _auth.signOut();
             },
           )

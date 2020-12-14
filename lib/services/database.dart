@@ -6,7 +6,7 @@ class DatabaseService {
 
 // database reference
   final CollectionReference icookCollection =
-      Firestore.instance.collection('iCOOK');
+      Firestore.instance.collection('Users');
 
   Future updateUserData(String name) async {
     return await icookCollection.document(uid).setData({
