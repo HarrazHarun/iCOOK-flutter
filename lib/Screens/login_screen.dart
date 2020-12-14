@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   image: DecorationImage(
                     image: AssetImage("assets/images/login.jpg"),
                     alignment: Alignment.topCenter,
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 child: SingleChildScrollView(
@@ -61,6 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        SizedBox(
+                          height: 120,
+                        ),
                         Image.asset(
                           'assets/images/logo.png',
                           //height: size.height * 0.2,
@@ -144,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         SizedBox(
-                          height: 200,
+                          height: 400,
                         )
                       ],
                     ),

@@ -51,7 +51,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   image: DecorationImage(
                     image: AssetImage("assets/images/login.jpg"),
                     alignment: Alignment.topCenter,
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 child: Form(
@@ -60,7 +60,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       SizedBox(
-                        height: 20,
+                        height: 120,
                       ),
                       Image.asset(
                         "assets/images/logo.png",
@@ -143,7 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                       ),
                       SizedBox(
-                        height: 200,
+                        height: 400,
                       ),
                     ],
                   ),

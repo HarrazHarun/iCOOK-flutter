@@ -27,7 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 100.0),
+            SizedBox(height: 320.0),
             // ignore: missing_required_param
             RoundedButton(
               text: "SIGN UP",
