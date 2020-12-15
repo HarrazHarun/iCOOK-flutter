@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:iCOOK/Screens/Welcome_screen.dart';
+
 import 'package:iCOOK/models/user.dart';
 import 'package:iCOOK/services/database.dart';
 
@@ -51,7 +54,10 @@ class AuthService {
       FirebaseUser user = result.user;
 
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).updateUserData(emailToDb: email);
+      await DatabaseService(uid: user.uid).updateUserData(
+        emailToDb: email,
+        passwordToDb: password,
+      );
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -67,5 +73,18 @@ class AuthService {
       print(e.toString());
       return WelcomeScreen();
     }
+  }
+
+// update user profile
+  Future updateScreen(String genderToDb, String nameToDb, String email,
+      DateTime dateToDb) async {
+    CollectionReference collectionReference =
+        Firestore.instance.collection('user');
+    QuerySnapshot querySnapshot = await collectionReference.getDocuments();
+    querySnapshot.documents[0].reference.updateData({
+      genderToDb: genderToDb,
+      nameToDb: nameToDb,
+      email: email,
+    });
   }
 }

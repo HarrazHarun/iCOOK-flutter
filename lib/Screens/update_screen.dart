@@ -119,7 +119,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
               // ignore: missing_required_param
               RoundedButton(
                 text: "UPDATE",
-                press: () {},
+                press: () async {},
                 textColor: Colors.white,
                 color: Colors.red[200],
               ),
