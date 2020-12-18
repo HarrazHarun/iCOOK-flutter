@@ -24,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   // text field state
   String email = '';
   String password = '';
+  String name = '';
   String error = '';
 
   @override
@@ -70,6 +71,17 @@ class _SignupScreenState extends State<SignupScreen> {
                         height: 60,
                       ),
                       RoundedInputField(
+                        validator: (_name) =>
+                            _name.isEmpty ? 'Enter a name' : null,
+                        hintText: "Username",
+                        icon: Icons.person,
+                        onChanged: (_name) {
+                          setState(() {
+                            name = _name;
+                          });
+                        },
+                      ),
+                      RoundedInputField(
                         validator: (_email) =>
                             _email.isEmpty ? 'Enter an email' : null,
                         hintText: "Email",
@@ -107,8 +119,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         press: () async {
                           if (_formKey.currentState.validate()) {
                             setState(() => loading = true);
-                            dynamic result = await _auth
-                                .registerWithEmailAndPassword(email, password);
+                            dynamic result =
+                                await _auth.registerWithEmailAndPassword(
+                                    email, password, name);
                             if (result == null) {
                               setState(() {
                                 error = 'please supply a valid email';
