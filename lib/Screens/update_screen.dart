@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iCOOK/Screens/Welcome_screen.dart';
 import 'package:iCOOK/components/rounded_button.dart';
+import 'package:iCOOK/components/rounded_input_field.dart';
+import 'package:iCOOK/components/rounded_password_field.dart';
 import 'package:iCOOK/models/user.dart';
 import 'package:iCOOK/services/database.dart';
 import 'package:provider/provider.dart';
@@ -11,10 +13,12 @@ class UpdateScreen extends StatefulWidget {
   _UpdateScreenState createState() => _UpdateScreenState();
 }
 
-//String _currentUserName;
-//String _currentGender;
-//String _currentEmail;
-//DateTime _currentDate;
+String userName;
+String gender;
+String email;
+String password;
+DateTime date;
+String error = '';
 
 class Gender {
   int id;
@@ -82,7 +86,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection('users').snapshots(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             return Form(
               key: _formKey,
@@ -103,9 +107,42 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         SizedBox(
                           height: 35,
                         ),
-                        buildTextField("Name", ""),
+                        RoundedInputField(
+                          validator: (_name) =>
+                              _name.isEmpty ? 'Enter a name' : null,
+                          hintText: "Username",
+                          icon: Icons.person,
+                          onChanged: (_name) {
+                            setState(() {
+                              userName = _name;
+                            });
+                          },
+                        ),
+
                         //pass value
-                        buildTextField("Email", ""),
+                        RoundedInputField(
+                          validator: (_email) =>
+                              _email.isEmpty ? 'Enter an email' : null,
+                          hintText: "Email",
+                          icon: Icons.mail,
+                          onChanged: (_email) {
+                            setState(() {
+                              email = _email;
+                            });
+                          },
+                        ),
+                        RoundedPasswordField(
+                          validator: (_password) => _password.length < 6
+                              ? 'Enter a password minimum 6 character'
+                              : null,
+                          hintText: "Password",
+                          icon: Icons.mail,
+                          onChanged: (_password) {
+                            setState(() {
+                              password = _password;
+                            });
+                          },
+                        ),
 
                         Text(
                           "Gender",
@@ -153,8 +190,18 @@ class _UpdateScreenState extends State<UpdateScreen> {
                             text: "UPDATE",
                             press: () async {
                               if (_formKey.currentState.validate()) {
-                                await DatabaseService(uid: user.uid)
-                                    .updateUserData();
+                                dynamic result =
+                                    await DatabaseService(uid: user.uid)
+                                        .updateUserData(
+                                            usernameToDb: userName,
+                                            passwordToDb: password,
+                                            emailToDb: email,
+                                            dateToDb: date);
+                                if (result == null) {
+                                  setState(() {
+                                    error = 'please supply a valid email';
+                                  });
+                                }
                               }
                             }),
                         /*print(_currentUserName);
@@ -221,7 +268,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
         });
   }
 
-  Widget buildTextField(String labelText, String placeholder) {
+  /* Widget buildTextField(String labelText, String placeholder) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: TextField(
@@ -240,7 +287,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
             )),
       ),
     );
-  }
+  }*/
 
   Future<void> _currentDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
