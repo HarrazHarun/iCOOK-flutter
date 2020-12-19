@@ -46,7 +46,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
   Gender _selectedGender;
   String select;
   DateTime selectedDate = DateTime.now();
-  TextEditingController _username;
+  final _username = TextEditingController();
   @override
   void initState() {
     _dropdownMenuItems = buildDropdownMenuItems(_genders);
@@ -91,6 +91,10 @@ class _UpdateScreenState extends State<UpdateScreen> {
         stream: Firestore.instance.collection('Users').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
+            _username.text = snapshot.data.documents[5]['Username'];
+            _selectedGender = snapshot.data.documents[5]['Gender'] == 'male'
+                ? _dropdownMenuItems[0].value
+                : _dropdownMenuItems[1].value;
             // String username = snapshot.data.documents[5]['Username'];
             // print(_username.text = snapshot.data.documents[5]['Username']);
             //return Text('Loading data.. Please Wait..');
@@ -124,19 +128,40 @@ class _UpdateScreenState extends State<UpdateScreen> {
                           height: 35,
                         ),
 
-                        /* userName != ''?*/ BuildTextField(
+                        // BuildTextField(
+                        //   controller: _username,
+                        //   validator: (_name) =>
+                        //       _name.isEmpty ? 'Enter a name' : null,
+                        //   hintText: "Username",
+                        //   icon: Icons.person,
+                        //   onChanged: (_name) {
+                        //     setState(() {
+                        //       _username.text = _name;
+                        //     });
+                        //   },
+                        // ),
+                        TextFormField(
                           controller: _username,
-                          validator: (_name) =>
-                              _name.isEmpty ? 'Enter a name' : null,
-                          hintText: "Username",
-                          icon: Icons.person,
-                          onChanged: (_name) {
-                            setState(() {
-                              userName = _name;
-                            });
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.text,
+                          focusNode: FocusNode(),
+                          validator: (username) {
+                            if (username == '') {
+                              return 'username invalid';
+                            } else {
+                              return null;
+                            }
                           },
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(left: 30),
+                            hintText: 'Username',
+                            hintStyle: TextStyle(
+                              color: Colors.black54,
+                            ),
+                            filled: false,
+                          ),
+                          textInputAction: TextInputAction.next,
                         ),
-
                         //pass value
                         /*RoundedInputField(
                           validator: (_email) => _email.isEmpty
@@ -193,10 +218,11 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         SizedBox(
                           height: 10,
                         ),
-                        selectedDate != null
-                            ? Text("${selectedDate.toLocal()}".split(' ')[0])
-                            : Text(snapshot.data.documents[5]['Birthday Date']
-                                .toString()),
+                        // selectedDate != null
+                        //     ? Text("${selectedDate.toLocal()}".split(' ')[0])
+                        //     :
+                        Text(snapshot.data.documents[5]['Birthday Date']
+                            .toString()),
                         SizedBox(
                           height: 5.0,
                         ),
@@ -217,7 +243,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                 dynamic result =
                                     await DatabaseService(uid: user.uid)
                                         .updateUserData(
-                                            usernameToDb: userName,
+                                            usernameToDb: _username.text,
                                             dateToDb: selectedDate.toString(),
                                             genderToDb: _selectedGender.name);
                                 if (result == null) {
