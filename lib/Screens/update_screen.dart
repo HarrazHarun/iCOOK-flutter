@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iCOOK/Screens/Welcome_screen.dart';
+import 'package:iCOOK/components/bottom_navigation_bar.dart';
+import 'package:iCOOK/components/build_text_field.dart';
+import 'package:iCOOK/components/outline_button.dart';
 import 'package:iCOOK/components/rounded_button.dart';
 import 'package:iCOOK/components/rounded_input_field.dart';
 import 'package:iCOOK/components/rounded_password_field.dart';
@@ -37,13 +40,13 @@ class Gender {
 class _UpdateScreenState extends State<UpdateScreen> {
   final _formKey = GlobalKey<FormState>();
   final List<String> gender = ['male', 'female'];
-  int _currentIndex = 3;
+  int _currentIndex = 2;
   List<Gender> _genders = Gender.getGenders();
   List<DropdownMenuItem<Gender>> _dropdownMenuItems;
   Gender _selectedGender;
   String select;
   DateTime selectedDate = DateTime.now();
-
+  TextEditingController _username;
   @override
   void initState() {
     _dropdownMenuItems = buildDropdownMenuItems(_genders);
@@ -85,9 +88,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
     final user = Provider.of<User>(context);
 
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('users').snapshots(),
+        stream: Firestore.instance.collection('Users').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
+            // String username = snapshot.data.documents[5]['Username'];
+            // print(_username.text = snapshot.data.documents[5]['Username']);
+            //return Text('Loading data.. Please Wait..');
+            //print(snapshot.data.documents[0]['Usename']);
+            // return Column(
+            //   children: <Widget>[
+            //     Text(snapshot.data.documents[0]['Birthday Date'].toString()),
+            //     Text(snapshot.data.documents[0]['Gender'].toString()),
+            //     Text(snapshot.data.documents[0]['Usename']),
+            //   ],
+            // );
+
             return Form(
               key: _formKey,
               child: Scaffold(
@@ -95,6 +110,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   backgroundColor: Colors.lightGreen,
                   title: Text('iCOOK - profile'),
                   centerTitle: true,
+                  automaticallyImplyLeading: false,
                 ),
                 body: Container(
                   padding: EdgeInsets.only(left: 16, top: 25, right: 16),
@@ -107,7 +123,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         SizedBox(
                           height: 35,
                         ),
-                        RoundedInputField(
+
+                        /* userName != ''?*/ BuildTextField(
+                          controller: _username,
                           validator: (_name) =>
                               _name.isEmpty ? 'Enter a name' : null,
                           hintText: "Username",
@@ -120,9 +138,12 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         ),
 
                         //pass value
-                        RoundedInputField(
-                          validator: (_email) =>
-                              _email.isEmpty ? 'Enter an email' : null,
+                        /*RoundedInputField(
+                          validator: (_email) => _email.isEmpty
+                              ? 'Enter an email'
+                              : !_email.contains("@")
+                                  ? "enter a valid email"
+                                  : null,
                           hintText: "Email",
                           icon: Icons.mail,
                           onChanged: (_email) {
@@ -142,7 +163,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                               password = _password;
                             });
                           },
-                        ),
+                        ),*/
 
                         Text(
                           "Gender",
@@ -172,7 +193,10 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         SizedBox(
                           height: 10,
                         ),
-                        Text("${selectedDate.toLocal()}".split(' ')[0]),
+                        selectedDate != null
+                            ? Text("${selectedDate.toLocal()}".split(' ')[0])
+                            : Text(snapshot.data.documents[5]['Birthday Date']
+                                .toString()),
                         SizedBox(
                           height: 5.0,
                         ),
@@ -187,16 +211,15 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         RoundedButton(
                             textColor: Colors.white,
                             color: Colors.red[200],
-                            text: "UPDATE",
+                            text: "Edit",
                             press: () async {
                               if (_formKey.currentState.validate()) {
                                 dynamic result =
                                     await DatabaseService(uid: user.uid)
                                         .updateUserData(
                                             usernameToDb: userName,
-                                            passwordToDb: password,
-                                            emailToDb: email,
-                                            dateToDb: date);
+                                            dateToDb: selectedDate.toString(),
+                                            genderToDb: _selectedGender.name);
                                 if (result == null) {
                                   setState(() {
                                     error = 'please supply a valid email';
@@ -211,7 +234,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                           },*/
 
                         // ignore: missing_required_param
-                        RoundedButton(
+                        OutButton(
                           text: "LOG OUT",
                           textColor: Colors.redAccent,
                           color: Colors.pink[50],
@@ -230,7 +253,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     ),
                   ),
                 ),
-                bottomNavigationBar: BottomNavigationBar(
+                /*bottomNavigationBar: BottomNavigationBar(
                   currentIndex: _currentIndex,
                   iconSize: 30,
                   selectedFontSize: 15,
@@ -261,14 +284,18 @@ class _UpdateScreenState extends State<UpdateScreen> {
                       _currentIndex = index;
                     });
                   },
-                ),
+                ),*/
               ),
             );
-          } else {}
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         });
   }
 
-  /* Widget buildTextField(String labelText, String placeholder) {
+  /*Widget buildTextField(String labelText, String placeholder) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: TextField(

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:iCOOK/Screens/Welcome_screen.dart';
+import 'package:iCOOK/Screens/update_screen.dart';
 
 import 'package:iCOOK/models/user.dart';
 import 'package:iCOOK/services/database.dart';
@@ -60,9 +61,11 @@ class AuthService {
 
       // create a new document for the user with the uid
       await DatabaseService(uid: user.uid).updateUserData(
-        emailToDb: email,
-        passwordToDb: password,
+        //emailToDb: email,
+        //passwordToDb: password,
         usernameToDb: name,
+        genderToDb: gender.toString(),
+        dateToDb: date.toString(),
       );
       return _userFromFirebaseUser(user);
     } catch (e) {
