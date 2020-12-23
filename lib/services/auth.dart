@@ -21,6 +21,16 @@ class AuthService {
         .map(_userFromFirebaseUser);
   }
 
+  // get uid
+  Future<String> getCurrentUID() async {
+    return (await _auth.currentUser()).uid;
+  }
+
+  // get current user
+  Future getCurrentUser() async {
+    return await _auth.currentUser();
+  }
+
   // sign in anon
   Future signInAnon() async {
     try {

@@ -47,6 +47,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
   String select;
   DateTime selectedDate = DateTime.now();
   final _username = TextEditingController();
+  bool ontapSelected = false;
   @override
   void initState() {
     _dropdownMenuItems = buildDropdownMenuItems(_genders);
@@ -70,11 +71,31 @@ class _UpdateScreenState extends State<UpdateScreen> {
   onChangeDropdownItem(Gender selectedGender) {
     setState(() {
       _selectedGender = selectedGender;
+      // _selectedGender = _selectedGender.name == 'male'
+      //     ? _dropdownMenuItems[0].value
+      //     : _dropdownMenuItems[1].value;
     });
+    print(_selectedGender.name);
   }
 
   @override
   Widget build(BuildContext context) {
+    /*return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          FutureBuilder(
+            future: Provider.of(context).auth.getCurrentUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Text("${snapshot.data.displayUsername}");
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          )
+        ],
+      ),
+    );*/
     /*final users = Provider.of<List<InfoUser>>(context);
     users.forEach((user) {
       print(user.username);
@@ -84,7 +105,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
     });
     return StreamProvider<List<InfoUser>>.value(
       value: DatabaseService().users,*/
-
+    // yang ini sebelum ni
     final user = Provider.of<User>(context);
 
     return StreamBuilder<QuerySnapshot>(
@@ -92,9 +113,12 @@ class _UpdateScreenState extends State<UpdateScreen> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             _username.text = snapshot.data.documents[5]['Username'];
-            _selectedGender = snapshot.data.documents[5]['Gender'] == 'male'
-                ? _dropdownMenuItems[0].value
-                : _dropdownMenuItems[1].value;
+            if (ontapSelected == false) {
+              _selectedGender = snapshot.data.documents[5]['Gender'] == 'male'
+                  ? _dropdownMenuItems[0].value
+                  : _dropdownMenuItems[1].value;
+            }
+            // print(snapshot.data.documents[5]['Gender']);
             // String username = snapshot.data.documents[5]['Username'];
             // print(_username.text = snapshot.data.documents[5]['Username']);
             //return Text('Loading data.. Please Wait..');
@@ -189,7 +213,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
                             });
                           },
                         ),*/
-
+                        SizedBox(
+                          height: 50,
+                        ),
                         Text(
                           "Gender",
                           style: TextStyle(
@@ -204,6 +230,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
                           value: _selectedGender,
                           items: _dropdownMenuItems,
                           onChanged: onChangeDropdownItem,
+                          onTap: () {
+                            ontapSelected = true;
+                          },
                         ),
                         SizedBox(
                           height: 10,
