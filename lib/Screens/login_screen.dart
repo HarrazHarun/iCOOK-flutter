@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iCOOK/Screens/Signup_screen.dart';
 
-import 'package:iCOOK/Screens/update_screen.dart';
 import 'package:iCOOK/components/already_have_an_account_acheck.dart';
 import 'package:iCOOK/components/bottomnavi.dart';
 import 'package:iCOOK/components/rounded_button.dart';

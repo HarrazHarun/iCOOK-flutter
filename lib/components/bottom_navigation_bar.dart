@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iCOOK/Screens/recipe_screen.dart';
+
+import 'package:iCOOK/Screens/recipes_screen.dart';
 import 'package:iCOOK/Screens/scan_screen.dart';
 import 'package:iCOOK/Screens/tips_screen.dart';
 import 'package:iCOOK/Screens/update_screen.dart';

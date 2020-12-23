@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:iCOOK/shared/constant.dart';
-
 String labelText;
 String placeholder;
 

@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iCOOK/Screens/recipe_screen.dart';
+
+import 'package:iCOOK/Screens/recipes_screen.dart';
 import 'package:iCOOK/Screens/tips_screen.dart';
 import 'package:iCOOK/Screens/update_screen.dart';
-import 'package:iCOOK/components/bottom_navigation_bar.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 

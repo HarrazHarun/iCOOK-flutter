@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iCOOK/Screens/Welcome_screen.dart';
-import 'package:iCOOK/components/bottom_navigation_bar.dart';
-import 'package:iCOOK/components/build_text_field.dart';
+
 import 'package:iCOOK/components/outline_button.dart';
 import 'package:iCOOK/components/rounded_button.dart';
-import 'package:iCOOK/components/rounded_input_field.dart';
-import 'package:iCOOK/components/rounded_password_field.dart';
+
 import 'package:iCOOK/models/user.dart';
 import 'package:iCOOK/services/database.dart';
 import 'package:provider/provider.dart';
@@ -112,7 +110,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
         stream: Firestore.instance.collection('Users').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
-            _username.text = snapshot.data.documents[5]['Username'];
+            _username.text = snapshot.data.documents[5].data['Username'];
             if (ontapSelected == false) {
               _selectedGender = snapshot.data.documents[5]['Gender'] == 'male'
                   ? _dropdownMenuItems[0].value
